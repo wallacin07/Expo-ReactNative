@@ -25,8 +25,8 @@ export default function Login() {
   console.log(typeof email, typeof pass);
 
   return (
-    <>
-      <SafeAreaView>
+
+      <View style={styles.container}>
         {/* Logar com */}
         <View style={styles.viewIcons}>
 
@@ -47,6 +47,12 @@ export default function Login() {
                     </View>
                     
                 </View>
+
+            <View style={styles.line} >
+              <Text style={styles.textLine}>
+              - - - - - - - - - - - - - - - - - - -    OR    - - - - - - - - - - - - - - - - - -
+              </Text>
+            </View>
 
             </View>
 
@@ -75,6 +81,8 @@ export default function Login() {
             />
           </View>
 
+        <View style={styles.RememberButton}>
+
           <Switch
             trackColor={{ false: "#767577", true: "#21E721FF" }}
             thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
@@ -83,14 +91,17 @@ export default function Login() {
             value={isEnabled}
           />
 
+          <Text>Remember Me</Text>
+
+
+        </View>
+
           <TouchableOpacity style={styles.button} onPress={onPress}>
             <Link style={styles.btnText} href={"/register"}>Logar</Link>
           </TouchableOpacity>
-            <Text>Não tem uma conta? <Link style={styles.textCreate} href={"/register"}>Crie uma nova aqui</Link></Text>
+            <Text style={styles.textNewAccount}>Não tem uma conta? <Link style={styles.textCreate} href={"/register"}>Crie uma nova aqui</Link></Text>
         </View>
-      </SafeAreaView>
-
-    </>
+      </View>
   );
 }
 const styles = StyleSheet.create({
@@ -106,19 +117,20 @@ const styles = StyleSheet.create({
   textLabel:{
     fontWeight: "700",
     fontSize: 16,
-    marginBottom: 10,
-    marginTop:25
+    marginBottom: 18,
+    marginTop:35
   },
   textCreate:{
     fontWeight: "500",
-    fontSize: 14,
-    color: "#54E062FF"
+    fontSize: 18,
+    color: "#54E062FF",
   },
   button: {
     backgroundColor: "#50d15a",
     justifyContent: "center",
     height: 55,
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: 50
   },
   btnText: {
     color: "#FFFFFF",
@@ -148,19 +160,41 @@ const styles = StyleSheet.create({
   viewIcons: {
     paddingHorizontal: 50,
     paddingVertical: 25,
+    flex:1
   },
   textLogin:{
     width:150,
-    marginHorizontal: 100,
+    marginHorizontal: 150,
     fontWeight: "700",
     fontSize: 22,
-    marginBottom: 25,
-    marginTop: 35
+    marginBottom: 45,
+    marginTop: 45
   },
   login: {
-    paddingHorizontal: 25
+    paddingHorizontal: 25,
+    flex:2
+  }, 
+  RememberButton:{
+    flexDirection: "row",
+    marginVertical:15
+  },
+  container:{
+    flex:1
+  },
+  textNewAccount:{
+    marginLeft: 65,
+    marginTop: 65,
+    fontSize:18
+  },
+  line: {
+    width: 400,
+    height: 2,
+    color: "#ADA5A5FF",
+    marginTop: 65,
+  },
+  textLine: {
+    color: "#ADA5A5FF",
   }
-
 });
 
 {
