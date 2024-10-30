@@ -1,6 +1,8 @@
 import { Link, router } from "expo-router";
-import React, { useState } from "react";
-import {Image} from "expo-image"
+import React, { useEffect, useState } from "react";
+import {Image} from "expo-image";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { FIREBASE_AUTH } from "@/firebaseConfig"
 import {
   View,
   Text,
@@ -17,10 +19,24 @@ export default function Login() {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
-  const onPress = () => {
-    router.push("/(tabs)");
-  };
+  const auth = FIREBASE_AUTH;
 
+  useEffect(() =>{
+      console.log(auth.currentUser)
+  }, [auth.currentUser]);
+  useEffect(() => {
+      console.log(email, pass)
+  }, [email, pass]);
+
+  const signIn = () => {
+      signInWithEmailAndPassword(auth, email, pass)
+      .then((dadosUsuario) => {
+          console.log(dadosUsuario);
+          router.push('/(tabs)')
+      }).catch((error) =>{
+          alert(error.message); 
+      })
+  }
   console.log(email, pass);
   console.log(typeof email, typeof pass);
 
@@ -74,8 +90,8 @@ export default function Login() {
             <Text style={styles.textLabel}>Password</Text>
             <TextInput
               style={styles.input}
-              onChangeText={setEmail}
-              value={email}
+              onChangeText={setPass}
+              value={pass}
               placeholder="Digite seu email"
               inputMode="email"
             />
@@ -96,7 +112,7 @@ export default function Login() {
 
         </View>
 
-          <TouchableOpacity style={styles.button} onPress={onPress}>
+          <TouchableOpacity style={styles.button} onPress={signIn}>
             <Link style={styles.btnText} href={"/register"}>Logar</Link>
           </TouchableOpacity>
             <Text style={styles.textNewAccount}>Não tem uma conta? <Link style={styles.textCreate} href={"/register"}>Crie uma nova aqui</Link></Text>
