@@ -1,123 +1,53 @@
 import { Link, router } from "expo-router";
-import React, { useEffect, useState } from "react";
-import {Image} from "expo-image";
+import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { FIREBASE_AUTH } from "@/firebaseConfig"
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Switch,
-} from "react-native";
+import { FIREBASE_AUTH } from "@/firebaseConfig";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Switch } from "react-native";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const toggleSwitch = () => setIsEnabled((prev) => !prev);
 
   const auth = FIREBASE_AUTH;
 
-  useEffect(() =>{
-      console.log(auth.currentUser)
-  }, [auth.currentUser]);
-  useEffect(() => {
-      console.log(email, pass)
-  }, [email, pass]);
-
   const signIn = () => {
-      signInWithEmailAndPassword(auth, email, pass)
+    signInWithEmailAndPassword(auth, email, pass)
       .then((dadosUsuario) => {
-          console.log(dadosUsuario);
-          router.push('/(tabs)')
-      }).catch((error) =>{
-          alert(error.message); 
+        if (dadosUsuario.user.email === "admin@adm.adm") {
+          router.push("/(adm)"); // Redireciona para a página de CRUD do admin
+        } else {
+          router.push('/(users)'); // Redireciona para o mostruário de roupas
+        }
       })
-  }
-  console.log(email, pass);
-  console.log(typeof email, typeof pass);
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
 
   return (
-
-      <View style={styles.container}>
-        {/* Logar com */}
-        <View style={styles.viewIcons}>
-
-            <View >
-
-            <Text style={styles.textLogin}>Logar com</Text>
-                <View  style={styles.boxContentIcons}>
-                    <View style={styles.boxIcon}>
-                        <Image style={styles.imageIcon} source={"../assets/apple.png"}></Image>
-                    </View>
-
-                    <View style={styles.boxIcon}> 
-                        <Image style={styles.imageIcon} source={"../assets/face.png"}></Image>
-                    </View>
-
-                    <View style={styles.boxIcon}>
-                    <Image style={styles.imageIcon} source={"../assets/x.png"}></Image>
-                    </View>
-                    
-                </View>
-
-            <View style={styles.line} >
-              <Text style={styles.textLine}>
-              - - - - - - - - - - - - - - - - - - -    OR    - - - - - - - - - - - - - - - - - -
-              </Text>
-            </View>
-
-            </View>
-
-        </View>
-
-        {/* Cadastro normal */}
-
-        <View style={styles.login}>
-          {/* Inputs */}
-          <View>
-            <Text style={styles.textLabel}>Email Adress</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setEmail}
-              value={email}
-              placeholder="Digite seu email"
-              inputMode="email"
-            />
-            <Text style={styles.textLabel}>Password</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setPass}
-              value={pass}
-              placeholder="Digite seu email"
-              inputMode="email"
-            />
-          </View>
-
-        <View style={styles.RememberButton}>
-
-          <Switch
-            trackColor={{ false: "#767577", true: "#21E721FF" }}
-            thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#C44747FF"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-          />
-
-          <Text>Remember Me</Text>
-
-
-        </View>
-
-          <TouchableOpacity style={styles.button} onPress={signIn}>
-            <Link style={styles.btnText} href={"/register"}>Logar</Link>
-          </TouchableOpacity>
-            <Text style={styles.textNewAccount}>Não tem uma conta? <Link style={styles.textCreate} href={"/register"}>Crie uma nova aqui</Link></Text>
-        </View>
-      </View>
+    <View style={styles.container}>
+      <Text style={styles.textLabel}>Email Address</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={setEmail}
+        value={email}
+        placeholder="Digite seu email"
+      />
+      <Text style={styles.textLabel}>Password</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={setPass}
+        value={pass}
+        placeholder="Digite sua senha"
+        secureTextEntry={true}
+      />
+      <TouchableOpacity style={styles.button} onPress={signIn}>
+        <Text style={styles.btnText}>Logar</Text>
+      </TouchableOpacity>
+      <Text>Não tem uma conta? <Link href="/register">Crie uma nova aqui</Link></Text>
+    </View>
   );
 }
 const styles = StyleSheet.create({
